@@ -1,0 +1,16 @@
+﻿Der Buildvorgang wurde am 05.06.2017 20:03:46 gestartet.
+     1>Projekt "c:\Users\Admin\documents\visual studio 2013\Projects\Supermarkt\Supermarkt\Supermarkt.vcxproj" auf Knoten "2", Build Ziel(e).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\Supermarkt.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt simpleTime.cpp
+         simpleTime.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"c:\users\admin\documents\visual studio 2013\Projects\Supermarkt\Debug\Supermarkt.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"c:\users\admin\documents\visual studio 2013\Projects\Supermarkt\Debug\Supermarkt.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"c:\users\admin\documents\visual studio 2013\Projects\Supermarkt\Debug\Supermarkt.lib" /MACHINE:X86 Debug\simpleTime.obj
+         Debug\stdafx.obj
+         Debug\Porgramm.obj
+         Debug\Supermarket.obj
+         Supermarkt.vcxproj -> c:\users\admin\documents\visual studio 2013\Projects\Supermarkt\Debug\Supermarkt.exe
+     1>Die Erstellung des Projekts "c:\Users\Admin\documents\visual studio 2013\Projects\Supermarkt\Supermarkt\Supermarkt.vcxproj" ist abgeschlossen, Build Ziel(e).
+
+Build erfolgreich.
+
+Verstrichene Zeit 00:00:00.57
