@@ -19,7 +19,7 @@ Customer::Customer(simpleTime arrival){
 //TODO get seed
 int Customer::generateItemAmount(){
 	//int seed =getSeed
-	//poisson 	
+	//poisson distribution 	
 }
 
 
