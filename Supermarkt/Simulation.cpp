@@ -7,8 +7,11 @@
 #include <string>
 #include <ctime>
 #include "simpleTime.h"
+#include <vector>
+#include <random>
 using namespace std;
-int* fetchInput(string);
+
+void fetchInput(string, vector<int>*);
 void testTime();
 //TODO implement as Singleton
 //TODO add getter/setter and stuff
@@ -17,6 +20,8 @@ class Simulation
 public:
 	Simulation();
 	~Simulation();
+	int getSeed();
+	int customerStream();
 
 private:
 	simpleTime realTime; //the simulation time which is
@@ -40,32 +45,42 @@ Simulation::~Simulation()
 {
 }
 
+int Simulation::getSeed(){
+	return seed;
+}
+
+
 
 //TODO implement
-/*
-int customerStream(){
+
+int Simulation::customerStream(){
 cout << "customer stream was invoked " << endl;
-unsigned seed1 = std::chrono::system_clock::now().time_since_epoch().count();
+//unsigned seed1 = std::chrono::system_clock::now().time_since_epoch().count();
+
 std::poisson_distribution<int> distribution(10);
-std::default_random_engine gen(seed1);
+std::default_random_engine gen(getSeed());
 
 
 
 int amountOfCustomer = distribution(gen);
 cout << "amount of generated customer " << amountOfCustomer << endl;
+//the times and intervalls when a new customer arrives
 vector<int> arrivalDistribution(amountOfCustomer);
 
 int arrivalRate = 60 / amountOfCustomer;
 int tmp = arrivalRate;
 
+
+
 for (int i = 0; i < amountOfCustomer; i++)
 {
-arrivalDistribution[i] = tmp;
-tmp += arrivalRate;
+	arrivalDistribution[i] = tmp;
+	tmp += arrivalRate;
 }
-int counter = 0;
+	//only for debugging
+	int counter = 0;
 
-for each (int var in arrivalDistribution)
+for  (int var : arrivalDistribution)
 {
 
 cout << "arrvial of " << counter << " value  " << var << endl;
@@ -76,47 +91,42 @@ return amountOfCustomer;
 }
 
 
-*/
-
 /*
 ==============================MAIN======================================
 */
 
-int _tmain(int argc, _TCHAR* argv[])
+int main(int argc, char** argv)
 {
 
 	//get the file as parameter so a different file can be used
 	string file = "Inputfile.txt";
-	int *inputParams = fetchInput(file);
-	cout << inputParams[0] << endl;
+	std::vector<int> inputParams; 
+	fetchInput(file,&inputParams);
 	
 	
+	//debug test whether this does work
+	Simulation s;
+	s.customerStream();
+
 }
 
 
 //read the input file and fetch all arguments into the params array
-int* fetchInput(string filePath){
-
-	ifstream fileToRead(filePath);
+void fetchInput(string pFilePath,vector<int>* pInputParams){
+	ifstream fileToRead(pFilePath);
 	//is only used to extract the comments
 	string tmp;
 	int value;
-	//TODO maybe use a vector instead
-	// so the size can be 
-	//changed via variable
-	int params[11];
-	int counter = 0;
 	if (!fileToRead.is_open())
 	{
 		cout << "failed to open file" << endl;
 		exit(EXIT_FAILURE);
 	}
 	while (fileToRead >> tmp >> value){
-		params[counter] = value;
-		counter++;
+		cout<<tmp<<endl;
+		cout<<value<<endl;
+		pInputParams->push_back(value);
 	}
-	cout << params[0] << endl;
-	return params;
 	
 }
 //only for test purposes
@@ -132,7 +142,7 @@ void testTime(){
 	simpleTime greaterH(3, 58, 1);
 
 	int counter = 0;
-	for each (simpleTime var in stContainer)
+	for (simpleTime var : stContainer)
 	{
 		cout << "counter: " << counter << " same: " << (st == var) << " less: " << (st < var) << " greater " << (st>var) << endl;
 		counter++;

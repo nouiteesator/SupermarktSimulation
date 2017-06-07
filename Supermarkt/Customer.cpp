@@ -24,22 +24,37 @@ int Customer::generateItemAmount(){
 	//TODO implement poisson
 }
 
+int Customer::getItemAmount(){
+	return itemAmount;
+}
 
+void Customer::setItemAmount(int pAmonut){
+	itemAmount= pAmonut;
 
+}
 
-/*
-Customer();
-~Customer();
-Customer(simpleTime); //pass the arrial time
-private:
-int itemAmount;
-simpleTime arrivalTime;
-int waitForCartTime;
-int waitForPayTime;
-int timeSpent;
-simpleTime timeSpent;
-simpleTime leaveTime;
-int generateItemAmount();
+simpleTime Customer::getArrivalTime(){
+	return arrivalTime;	
+}
+int Customer::getWaitForCartTime(){
+	return waitForCartTime;
+}
+void Customer::setWaitForCartTime(int pWaitForCartTime){
+	waitForCartTime	= pWaitForCartTime;
+}
 
-
-*/
+int Customer::getWaitForPayTime(){
+	return waitForPayTime;
+}
+void Customer::setWaitForPayTime(int pWaitForPayTime){
+	waitForPayTime=pWaitForPayTime;
+}
+simpleTime Customer::getTimeSpent(){
+	return timeSpent;
+}
+void setTimeSpent(simpleTime pTimeSpent){
+		timeSpent = pTimeSpent;
+}
+void setArrivalTime(simpleTime pArrivalTime){
+	arrivalTime = pArrivalTime;
+}
