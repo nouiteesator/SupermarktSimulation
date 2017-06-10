@@ -1,0 +1,45 @@
+simulation
+jegliche ausführung von events wird durch die simulations klasse getriggerd, weshalb dem entsprechend eine 
+neue methode in der simulation hinzugefügt werden muss
+
+
+
+eventschlange
+eine simulation läuft solange bis die eventschlange leer ist, 
+daher noch ein is empty einfügen
+außerdem muss die schlange über eine insert methode verfügen die über das 
+einfügen hinaus die events an die richtigen stellen einfügt
+
+
+
+supermarkt
+benötig noch eine is open methode
+wenn die falsche zurückliefert werden keine neuen kunden mehr erzeugt
+
+
+events 
+events sollten die events die sie erzeugen zurückliefern 
+wenn möglich an die simulations klasse 
+von dort wird dann die insert methode für jedes event ausgeführt 
+-wird ein event ausgeführt wird die simulations zeit voran getrieben
+
+-------------------------------------------------------------
+ablauf einer iteration while eventschlange.isEmtpty== false // vorher wurde eventschlange kreiert und mit den start events befüllt
+
+simulation: execute next event;
+
+eventhandler: execute next event: // führt das event an erster stelle aus
+
+event: führt seine execute methode aus und generiert ggf. neue events und liefert diese an den eventhandler zurück 
+
+!!!!! entscheidungsfrage!!!
+an welcher stelle werden die events welche von dem ausgeführten event generiert wurden hinzugefügt
+-> bei der event generierung; beim zurückgeben an den eventhandler; oder werden events an die simulation
+zurückgeliefert? 
+
+für letzteres spricht die übersichtlichkeit: jede methode hat nur eine kern aufgabe 
+andernfalls nicht ersichtlich was alles passiert
+
+die anderen fälle produzieren jedoch weniger overhead
+
+
