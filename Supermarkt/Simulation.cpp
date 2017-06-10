@@ -1,4 +1,4 @@
-// Supermarkt.cpp : Definiert den Einstiegspunkt für die Konsolenanwendung.
+// SImulation.cpp : Definiert den Einstiegspunkt für die Konsolenanwendung.
 //
 
 #include "stdafx.h"
@@ -91,9 +91,9 @@ return amountOfCustomer;
 }
 
 
-/*
+/*======================================================================
 ==============================MAIN======================================
-*/
+======================================================================*/
 
 int main(int argc, char** argv)
 {
@@ -129,7 +129,9 @@ void fetchInput(string pFilePath,vector<int>* pInputParams){
 	}
 	
 }
-//only for test purposes
+//================================================================================================================
+//===========================================only for test purposes===============================================
+//================================================================================================================
 void testTime(){
 	simpleTime stContainer[] = { simpleTime(2, 58, 1), simpleTime(2, 58, 1), simpleTime(2, 58, 0), simpleTime(2, 57, 1), simpleTime(1, 58, 1), simpleTime(2, 58, 2), simpleTime(2, 59, 1), simpleTime(3, 58, 1) };
 	simpleTime st(2, 58, 1);
