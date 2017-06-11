@@ -9,10 +9,13 @@ public:
 	void increaseSeconds(int s);
 	//Dont believe we need that
 	void increaseMinutes(int);
-	bool operator ==(simpleTime);
-	bool operator <(simpleTime);
-	bool operator >(simpleTime);
+	bool operator ==(simpleTime)const;
+	bool operator <(simpleTime)const;
+	bool operator >(simpleTime)const;
 	std::string toString();
+	int getMinutes();
+	int getSeconds();
+	int getHours();
 
 private: 
 	int seconds;
