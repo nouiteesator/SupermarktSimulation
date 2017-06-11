@@ -9,6 +9,8 @@
 #include "simpleTime.h"
 #include <vector>
 #include <random>
+#include <queue>
+#include "Event.h" 
 using namespace std;
 
 void fetchInput(string, vector<int>*);
@@ -106,8 +108,49 @@ int main(int argc, char** argv)
 	
 	//debug test whether this does work
 	Simulation s;
-	s.customerStream();
+	
+	
+	
+	priority_queue<Event, vector<Event>,greater<Event>> pq;
+	pq.emplace(simpleTime(8,0,0),2,simpleTime(9,0,0),3);
+	pq.emplace(simpleTime(8,0,0),1,simpleTime(9,0,0),3);
+	pq.emplace(simpleTime(8,0,0),3,simpleTime(9,0,0),3);
+	pq.emplace(simpleTime(7,0,0),2,simpleTime(9,0,0),3);
+	pq.emplace(simpleTime(7,0,0),7,simpleTime(9,0,0),3);
+	pq.emplace(simpleTime(8,0,1),1,simpleTime(9,0,0),3);
+	pq.emplace(simpleTime(8,1,0),1,simpleTime(9,0,0),3);
+	pq.emplace(simpleTime(9,0,0),1,simpleTime(9,0,0),3);
 
+	Event tmp =pq.top();
+	cout<< tmp.getStartTime().toString()<<endl;
+
+	while(!pq.empty()){
+		Event e = pq.top();
+		cout<<"start zeit "<<e.getStartTime().toString()<<" prio:"<<e.getPrio()<<endl;
+		pq.pop();
+	}
+
+
+	
+	    
+	//test priority queue with simpletime WORKS!!!!!!!!!!!!!!!!!!!!!
+	/*	priority_queue<simpleTime,vector<simpleTime>, greater<simpleTime> > pq;
+	pq.emplace(simpleTime(8,0,0));
+	pq.emplace(simpleTime(9,0,0));
+	pq.emplace(simpleTime(10,0,0));
+	pq.emplace(simpleTime(7,0,0));
+	pq.emplace(simpleTime(8,0,0));
+	pq.emplace(simpleTime(6,0,0));
+	while(!pq.empty()){
+		simpleTime st = pq.top();
+		cout<<"start zeit "<<st.toString()<<endl;
+		pq.pop();
+	}
+	//END TEST of priority queue
+	*/
+
+	
+	
 }
 
 

@@ -20,6 +20,17 @@ simpleTime::simpleTime(int h, int m, int s){
 	seconds = s;
 }
 
+int simpleTime::getSeconds(){
+	return seconds;
+}
+
+int simpleTime::getMinutes(){
+	return minutes;
+}
+
+int simpleTime::getHours(){
+	return hours;
+}
 
 void simpleTime::increaseSeconds(int s){
 	calculateCarry(s);
@@ -47,14 +58,14 @@ void simpleTime::calculateCarry(int s){
 	}	
 
 }
-bool simpleTime::operator==(simpleTime st){
+bool simpleTime::operator==(simpleTime st)const{
 	if (hours == st.hours && minutes == st.minutes && seconds == st.seconds){
 		return true;
 	}
 	return false;
 }
 
-bool simpleTime::operator<(simpleTime st){
+bool simpleTime::operator<(simpleTime st)const{
 
 	if (hours < st.hours){
 		return true;
@@ -79,7 +90,7 @@ bool simpleTime::operator<(simpleTime st){
 	return false;
 }
 
-bool simpleTime::operator>(simpleTime st){
+bool simpleTime::operator>(simpleTime st)const{
 	
 	if (*this == st){
 		return false;
