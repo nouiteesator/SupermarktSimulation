@@ -9,3 +9,4 @@
 #zeitBezahlvorgang 15
 #amountsOfSimulation 3
 #seed   123456789
+#seedfuerItem 987654321

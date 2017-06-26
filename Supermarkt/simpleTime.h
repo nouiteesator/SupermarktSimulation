@@ -6,7 +6,7 @@ public:
 	simpleTime();
 	simpleTime(int, int, int);
 	~simpleTime();
-	void increaseSeconds(int s);
+	void increaseSeconds(int);
 	//Dont believe we need that
 	void increaseMinutes(int);
 	bool operator ==(simpleTime)const;
@@ -21,7 +21,7 @@ private:
 	int seconds;
 	int minutes;
 	int hours;
-	void calculateCarry(int secs);
+	void calculateCarry(int);
 
 
 };

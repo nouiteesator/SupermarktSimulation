@@ -8,39 +8,50 @@
 #include <ctime>
 #include "simpleTime.h"
 #include <vector>
-#include <random>
 #include <queue>
-#include "Event.h" 
+#include "Event.h"
+#include <stdlib.h>
+#include "Eventhandler.h"
+#include "Simulation.h"
+ 
 using namespace std;
 
-void fetchInput(string, vector<int>*);
-void testTime();
-//TODO implement as Singleton
-//TODO add getter/setter and stuff
-class Simulation
-{
-public:
-	Simulation();
-	~Simulation();
-	int getSeed();
-	int customerStream();
+string Simulation::file = "Inputfile.txt";
+vector<int> Simulation::inputParams;
+int Simulation::kassen;
+int Simulation::wagen;
+int Simulation::dauer;
+int Simulation::itemWert;
+int Simulation::itemZeit;
+int Simulation::kunden;
+int Simulation::zeitProProdukt;
+int Simulation::bezahlen;
+int Simulation::simulationen;
+int Simulation::seed1;
+int Simulation::seed2;
 
-private:
-	simpleTime realTime; //the simulation time which is
-						//set by events
-	int doubleAmountOfCustomers; //0 -> nope 1 yes
-	int itemSpawnMean;  
-	int customerSpawnMean;
-	int timeForSelectingOneItem;
-	int cashboxServiceTimePerItem;
-	int paymentTime;
-	int simAmounts;
-	int seed;
-
-};
-//TODO implement new Constructor 
-Simulation::Simulation()
+Simulation::Simulation(){
+	fetchInput(Simulation::file,&Simulation::inputParams);
+	Simulation(true);
+}
+Simulation::Simulation(bool i):supermarket(Simulation::inputParams[0],simpleTime(0,0,0),simpleTime(0+Simulation::inputParams[2],0,0)),realTime(0,0,0),distribution(10),eventQueue()
 {
+	Simulation::kassen = inputParams[0];
+	Simulation::wagen = inputParams[1];
+	Simulation::dauer = inputParams[2];
+	//Simulation::rushhour = inputParams[3];
+	Simulation::itemWert = inputParams[4];
+	Simulation::kunden = inputParams[5];
+	Simulation::itemZeit = inputParams[6];
+	Simulation::zeitProProdukt = inputParams[7];
+	Simulation::bezahlen = inputParams[8];
+	Simulation::simulationen = inputParams[9];
+	Simulation::seed1 = inputParams[10];
+	Simulation::seed2 = inputParams[11];
+	gen.seed(seed1);
+	
+	this->preperation();
+	this->runQueue();
 }
 
 Simulation::~Simulation()
@@ -52,110 +63,68 @@ int Simulation::getSeed(){
 }
 
 
-
-//TODO implement
-
-int Simulation::customerStream(){
-cout << "customer stream was invoked " << endl;
-//unsigned seed1 = std::chrono::system_clock::now().time_since_epoch().count();
-
-std::poisson_distribution<int> distribution(10);
-std::default_random_engine gen(getSeed());
-
-
-
-int amountOfCustomer = distribution(gen);
-cout << "amount of generated customer " << amountOfCustomer << endl;
-//the times and intervalls when a new customer arrives
-vector<int> arrivalDistribution(amountOfCustomer);
-
-int arrivalRate = 60 / amountOfCustomer;
-int tmp = arrivalRate;
-
-
-
-for (int i = 0; i < amountOfCustomer; i++)
-{
-	arrivalDistribution[i] = tmp;
-	tmp += arrivalRate;
-}
-	//only for debugging
-	int counter = 0;
-
-for  (int var : arrivalDistribution)
-{
-
-cout << "arrvial of " << counter << " value  " << var << endl;
-counter++;
-}
-return amountOfCustomer;
+int Simulation::customerStream(int i){
+	cout << "customer stream was invoked " << endl;
+	int amountOfCustomer = distribution(gen);
+	cout << "amount of generated customer " << amountOfCustomer << endl;
+	return amountOfCustomer;
 
 }
 
-
-/*======================================================================
-==============================MAIN======================================
-======================================================================*/
-
-int main(int argc, char** argv)
-{
-
-	//get the file as parameter so a different file can be used
-	string file = "Inputfile.txt";
-	std::vector<int> inputParams; 
-	fetchInput(file,&inputParams);
-	
-	
-	//debug test whether this does work
-	Simulation s;
-	
-	
-	
-	priority_queue<Event, vector<Event>,greater<Event>> pq;
-	pq.emplace(simpleTime(8,0,0),2,simpleTime(9,0,0),3);
-	pq.emplace(simpleTime(8,0,0),1,simpleTime(9,0,0),3);
-	pq.emplace(simpleTime(8,0,0),3,simpleTime(9,0,0),3);
-	pq.emplace(simpleTime(7,0,0),2,simpleTime(9,0,0),3);
-	pq.emplace(simpleTime(7,0,0),7,simpleTime(9,0,0),3);
-	pq.emplace(simpleTime(8,0,1),1,simpleTime(9,0,0),3);
-	pq.emplace(simpleTime(8,1,0),1,simpleTime(9,0,0),3);
-	pq.emplace(simpleTime(9,0,0),1,simpleTime(9,0,0),3);
-
-	Event tmp =pq.top();
-	cout<< tmp.getStartTime().toString()<<endl;
-
-	while(!pq.empty()){
-		Event e = pq.top();
-		cout<<"start zeit "<<e.getStartTime().toString()<<" prio:"<<e.getPrio()<<endl;
-		pq.pop();
+void Simulation::generateCustomer(int a, simpleTime start){ //ja ich weiß, kann man schöner machen
+	int arrivalrate = 60 / a;
+	simpleTime temp2 = start;
+	int temp = 0;
+	for(int i = 0; i < a;i++){
+		temp += arrivalrate;
+		temp2.increaseSeconds(temp);
+		Customer newCustomer(temp2);
+		int j = rand() %100 + 1;
+		eventQueue.addEventQueue(generateEvent(temp2,j,temp2,1,newCustomer,this->getSupermarket()));
 	}
-
-
-	
-	    
-	//test priority queue with simpletime WORKS!!!!!!!!!!!!!!!!!!!!!
-	/*	priority_queue<simpleTime,vector<simpleTime>, greater<simpleTime> > pq;
-	pq.emplace(simpleTime(8,0,0));
-	pq.emplace(simpleTime(9,0,0));
-	pq.emplace(simpleTime(10,0,0));
-	pq.emplace(simpleTime(7,0,0));
-	pq.emplace(simpleTime(8,0,0));
-	pq.emplace(simpleTime(6,0,0));
-	while(!pq.empty()){
-		simpleTime st = pq.top();
-		cout<<"start zeit "<<st.toString()<<endl;
-		pq.pop();
-	}
-	//END TEST of priority queue
-	*/
-
-	
-	
 }
 
+void Simulation::setAmount(int i){
+	this->amount = i;
+}
+
+Event Simulation::generateEvent(simpleTime s, int p, simpleTime e, int st, Customer c, Supermarket su){
+	return Event(s,p,e,st,c,su);
+}
+
+Supermarket Simulation::getSupermarket(){
+	return this->supermarket;
+}
+void Simulation::preperation(){
+	Event e(simpleTime(0,0,0),1,simpleTime(0,0,0),10,Customer(),this->supermarket);
+	eventQueue.addEventQueue(e);
+	eventQueue.addEventQueue(Event(simpleTime(0+Simulation::dauer,0,0),1,simpleTime(0+Simulation::dauer,0,0),11,Customer(),this->supermarket));
+	eventQueue.addEventQueue(Event(simpleTime(0+Simulation::dauer-2,0,0),1,simpleTime(0+Simulation::dauer-2,0,0),12,Customer(),this->supermarket));
+	simpleTime temp2(0+Simulation::dauer-2,0,0);
+	while(realTime < temp2){
+		generateCustomer(customerStream(Simulation::kunden),realTime);
+		realTime.increaseMinutes(1);
+	}
+	while(realTime < simpleTime(Simulation::dauer,0,0)){
+		generateCustomer(customerStream(Simulation::kunden*2),realTime);
+		realTime.increaseMinutes(1);
+	}
+	realTime = simpleTime(0,0,0);
+	cout << eventQueue.getEventQueue().size() << endl;
+	cout << supermarket.getCustomerArrived() << endl;
+}
+simpleTime Simulation::getRealTime(){
+	return this->realTime;
+}
+void Simulation::setRealTime(simpleTime i){
+	this->realTime = i;
+}
+Eventhandler Simulation::getEventhandler(){
+	return this->eventQueue;
+}
 
 //read the input file and fetch all arguments into the params array
-void fetchInput(string pFilePath,vector<int>* pInputParams){
+void Simulation::fetchInput(string pFilePath,vector<int>* pInputParams){
 	ifstream fileToRead(pFilePath);
 	//is only used to extract the comments
 	string tmp;
@@ -172,31 +141,13 @@ void fetchInput(string pFilePath,vector<int>* pInputParams){
 	}
 	
 }
-//================================================================================================================
-//===========================================only for test purposes===============================================
-//================================================================================================================
-void testTime(){
-	simpleTime stContainer[] = { simpleTime(2, 58, 1), simpleTime(2, 58, 1), simpleTime(2, 58, 0), simpleTime(2, 57, 1), simpleTime(1, 58, 1), simpleTime(2, 58, 2), simpleTime(2, 59, 1), simpleTime(3, 58, 1) };
-	simpleTime st(2, 58, 1);
-	simpleTime same(2, 58, 1);
-	simpleTime lessSecond(2, 58, 0);
-	simpleTime lessMinute(2, 57, 1);
-	simpleTime lessHour(1, 58, 1);
-	simpleTime greaterS(2, 58, 2);
-	simpleTime greaterM(2, 59, 1);
-	simpleTime greaterH(3, 58, 1);
 
-	int counter = 0;
-	for (simpleTime var : stContainer)
-	{
-		cout << "counter: " << counter << " same: " << (st == var) << " less: " << (st < var) << " greater " << (st>var) << endl;
-		counter++;
+void Simulation::runQueue(){
+	cout << eventQueue.getEventQueue().size() << endl;
+	Event e = eventQueue.getEventQueue().top();
+	cout << e.toString() << endl;
+	while(eventQueue.getEventQueue().empty() != true){
+		cout << eventQueue.getEventQueue().size() << endl;
+		eventQueue.executeEvent();
 	}
-	st.increaseSeconds(5);
-	cout << "added five seconds expect 2, 58,6: " << st.toString() << endl;
-	st.increaseSeconds(55);
-	cout << "added five seconds expect 2, 59,1: " << st.toString() << endl;
-	st.increaseSeconds(70);
-	cout << "added five seconds expect 3, 0,11: " << st.toString() << endl;
-
 }

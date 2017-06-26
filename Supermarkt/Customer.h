@@ -16,18 +16,19 @@ public:
 	void setWaitForPayTime(int);
 	simpleTime getTimeSpent();
 	void setTimeSpent(simpleTime);
-
+	int getCashAuswahl();
+	void setCashAuswahl(int);
+	int generateItemAmount(int);
+	void setArrivalTime(simpleTime);
 
 private:
 	int itemAmount;
 	simpleTime arrivalTime;
 	int waitForCartTime;
 	int waitForPayTime;
-	int timeSpent;
 	simpleTime timeSpent;
 	simpleTime leaveTime;
-	int generateItemAmount();
-	void setArrivalTime(simpleTime);
+	int cashAuswahl;
 };
 
 /*
