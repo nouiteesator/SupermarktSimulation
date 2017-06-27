@@ -18,10 +18,10 @@ Eventhandler::~Eventhandler(){
 
 //getter
 
-priority_queue<Event, vector<Event>,greater<Event>> Eventhandler::getEventQueue(){
+priority_queue<Event, vector<Event>,greater<Event>>& Eventhandler::getEventQueue(){
 	return eventQueue;
 }
-Event Eventhandler::getfirstEvent(){
+Event  Eventhandler::getfirstEvent(){
 	return eventQueue.top();
 }
 
@@ -37,11 +37,13 @@ void Eventhandler::deleteEventQueue(){
 //Funktionen
 
 void Eventhandler::executeEvent(){
-	
-	list<Event> temp = getfirstEvent().execute();
+
+	list<Event> temp;
+	getfirstEvent().execute(temp);
+	eventQueue.pop();
 	cout << temp.front().toString() << endl;
 	if(temp.empty() == false){
-	
+	//why dont you use a while/for loop 
 		if(temp.front() == temp.back()){
 			eventQueue.push(temp.front());			
 		}else{
@@ -50,5 +52,5 @@ void Eventhandler::executeEvent(){
 		}
 	}
 	cout << getEventQueue().size() << endl;
-	eventQueue.pop();
+	
 }

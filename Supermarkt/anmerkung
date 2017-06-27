@@ -1,0 +1,10 @@
+anmerkung
+
+ein durcheinander an eventqueue und 
+eventhandler
+
+aus simulations sicht greift man auf queue 
+zurueck dabei ist es nur der handler
+
+in Eventhandler>>executeEvent 
+mal getQueue mal direkter zugriff

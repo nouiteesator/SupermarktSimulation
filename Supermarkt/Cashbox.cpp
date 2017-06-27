@@ -10,9 +10,10 @@ std::list<int>:: iterator it;
 
 //Konstruktoren
 
-Cashbox::Cashbox(int i){
+Cashbox::Cashbox(int i):custServed(0),cashBoxUsed(0),cashUsed(false),custQueue(){
 	this->cashBoxID = i;
 }
+
 Cashbox::Cashbox(){
 		
 }
@@ -34,10 +35,10 @@ int Cashbox::getCustServed(){
 bool Cashbox::getCashUsed(){
 	return this->cashUsed;
 }
-queue<Customer> Cashbox::getCustQueue(){
+queue<Customer>& Cashbox::getCustQueue(){
 	return this->custQueue;
 }
-Customer Cashbox::getCustQueueFirst(){
+Customer& Cashbox::getCustQueueFirst(){
 	return this->custQueue.front();
 }
 

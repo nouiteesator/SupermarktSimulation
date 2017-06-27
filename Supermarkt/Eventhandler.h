@@ -8,7 +8,7 @@ class Eventhandler{
 	public:
 		Eventhandler();
 		~Eventhandler();
-		priority_queue<Event, vector<Event>,greater<Event>> getEventQueue();
+		priority_queue<Event, vector<Event>,greater<Event>> & getEventQueue();
 		void addEventQueue(Event);
 		void deleteEventQueue();
 		Event getfirstEvent();

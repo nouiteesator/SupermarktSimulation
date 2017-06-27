@@ -15,9 +15,10 @@ Customer::~Customer()
 }
 
 
-Customer::Customer(simpleTime arrival){
+Customer::Customer(simpleTime arrival):waitForCartTime(0),waitForPayTime(0),timeSpent(0,0,0),leaveTime(0,0,0){
 	arrivalTime = arrival;
 	itemAmount = generateItemAmount(10);
+	cashAuswahl =0;
 }
 
 //Getter
@@ -25,7 +26,7 @@ Customer::Customer(simpleTime arrival){
 int Customer::getItemAmount(){
 	return itemAmount;
 }
-simpleTime Customer::getArrivalTime(){
+simpleTime& Customer::getArrivalTime(){
 	return arrivalTime;	
 }
 int Customer::getWaitForCartTime(){
@@ -34,7 +35,7 @@ int Customer::getWaitForCartTime(){
 int Customer::getWaitForPayTime(){
 	return waitForPayTime;
 }
-simpleTime Customer::getTimeSpent(){
+simpleTime& Customer::getTimeSpent(){
 	return timeSpent;
 }
 int Customer::getCashAuswahl(){

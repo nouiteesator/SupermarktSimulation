@@ -9,12 +9,12 @@ public:
 	Customer(simpleTime); //pass the arrial time
 	int getItemAmount();
 	void setItemAmount(int);
-	simpleTime getArrivalTime();
+	simpleTime& getArrivalTime();
 	int getWaitForCartTime();
 	void setWaitForCartTime(int);
 	int getWaitForPayTime();
 	void setWaitForPayTime(int);
-	simpleTime getTimeSpent();
+	simpleTime& getTimeSpent();
 	void setTimeSpent(simpleTime);
 	int getCashAuswahl();
 	void setCashAuswahl(int);

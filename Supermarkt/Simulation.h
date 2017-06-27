@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <random>
+//ulimit -c unlimited 
 class Simulation
 {
 	
@@ -29,15 +30,15 @@ public:
 	~Simulation();
 	int getSeed();
 	int customerStream(int);
-	Supermarket getSupermarket();
+	Supermarket& getSupermarket();
 	void preperation();
 	simpleTime getRealTime();
 	void setRealTime(simpleTime);
-	Eventhandler getEventhandler();
+	Eventhandler& getEventhandler();
 	void fetchInput(string, vector<int>*);
 	void testTime();
 	void generateCustomer(int, simpleTime);
-	Event generateEvent(simpleTime, int, simpleTime, int, Customer, Supermarket);
+	Event generateEvent(simpleTime, int, simpleTime&, int, Customer&, Supermarket&);
 	void setAmount(int);
 	void runQueue();
 

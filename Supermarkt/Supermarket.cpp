@@ -12,12 +12,15 @@ std::list<Customer>:: iterator ic;
 
 //constructoren
 
-Supermarket::Supermarket(int c, simpleTime s, simpleTime e){
+Supermarket::Supermarket(int c, simpleTime s, simpleTime e, int pAvailableCarts):customerArrived(0),customerPaid(0),
+	availableCarts(pAvailableCarts),custWaitForCart(),allCustomer(), isOpen(false),cashBoxes()
+{
 	this->closeTime = e;
 	this->openTime = s;
 	for(int i; i < c; i++){
 		cashBoxes.push_back(Cashbox(i + 1));
 	}
+
 }
 
 Supermarket::Supermarket(){
@@ -38,26 +41,26 @@ int Supermarket::getCustomerPaid(){
 int Supermarket::getAvailableCarts(){
 	return this->availableCarts;
 }
-queue<Customer> Supermarket::getCustWaitForCart(){
+queue<Customer>& Supermarket::getCustWaitForCart(){
 	return this->custWaitForCart;
 }
-list<Customer> Supermarket::getAllCustomer(){
+list<Customer>& Supermarket::getAllCustomer(){
 	return this->allCustomer;
 }
-vector<Cashbox> Supermarket::getCashBoxes(){
+vector<Cashbox>& Supermarket::getCashBoxes(){
 	return this->cashBoxes;
 }
-simpleTime Supermarket::getOpenTime(){
+simpleTime& Supermarket::getOpenTime(){
 	return this->openTime;
 }
-simpleTime Supermarket::getCloseTime(){
+simpleTime& Supermarket::getCloseTime(){
 	return this->closeTime; 
 }
-simpleTime Supermarket::getActualCloseTime(){
+simpleTime& Supermarket::getActualCloseTime(){
 	return this->actualCloseTime;
 }
-Cashbox Supermarket::getSpecificCashbox(int i){
-	return this->cashBoxes[i];
+Cashbox& Supermarket::getSpecificCashbox(int i){
+	return cashBoxes[i];
 }
 bool Supermarket::getIsOpen(){
 	return this->isOpen;
@@ -77,10 +80,10 @@ void Supermarket::addCustomerPaid(int i){
 void Supermarket::setAvailableCarts(int i){
 	this->availableCarts = i;
 }
-void Supermarket::addAllCustomer(Customer i){
+void Supermarket::addAllCustomer(Customer& i){
 	this->allCustomer.push_back(i);
 }
-void Supermarket::addCustWaitForCart(Customer i){
+void Supermarket::addCustWaitForCart(Customer& i){
 	this->custWaitForCart.push(i);
 }
 void Supermarket::setCashBoxes(int i){

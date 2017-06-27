@@ -9,20 +9,20 @@
 class Event{
 
 public:
-	Event(simpleTime, int, simpleTime, int, Customer, Supermarket);
+	Event(simpleTime, int, simpleTime, int, Customer, Supermarket&);
 	Event();
 	~Event();
-	list<Event> execute(); //needs to be reviewed 
+	void execute(list<Event>&); //needs to be reviewed 
 	bool operator>(const Event &e)const;
 	bool operator<(const Event &e)const;
-	simpleTime getStartTime();
-	simpleTime getEndTime();
+	simpleTime& getStartTime();
+	simpleTime& getEndTime();
 	int getPrio();
 	std::string toString();
-	Customer getCustomer();
-	Supermarket getSupermarket();
-	Event generateNextEvent(int,simpleTime);
-	Event generateNextEvent(int,simpleTime,Customer);
+	Customer& getCustomer();
+	Supermarket& getSupermarket();
+	Event generateNextEvent(int,simpleTime&);
+	Event generateNextEvent(int,simpleTime&,Customer&);
 	bool operator==(const Event &e)const;
 
 private:

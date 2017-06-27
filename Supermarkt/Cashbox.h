@@ -12,8 +12,8 @@ class Cashbox{
 		int getCashBoxID();
 		int getCashBoxUsed();
 		bool getCashUsed();
-		queue<Customer> getCustQueue();
-		Customer getCustQueueFirst();
+		queue<Customer>& getCustQueue();
+		Customer& getCustQueueFirst();
 		void addCustServed(int);
 		void setCashBoxUsed(int);
 		void setCashUsed(bool);
