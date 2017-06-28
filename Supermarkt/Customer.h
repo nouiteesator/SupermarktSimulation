@@ -6,7 +6,7 @@ class Customer
 public:
 	Customer();
 	~Customer();
-	Customer(simpleTime); //pass the arrial time
+	Customer(simpleTime, int); //pass the arrial time
 	int getItemAmount();
 	void setItemAmount(int);
 	simpleTime& getArrivalTime();
@@ -18,8 +18,8 @@ public:
 	void setTimeSpent(simpleTime);
 	int getCashAuswahl();
 	void setCashAuswahl(int);
-	int generateItemAmount(int);
 	void setArrivalTime(simpleTime);
+
 
 private:
 	int itemAmount;

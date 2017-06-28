@@ -4,6 +4,8 @@
 #include <stddef.h>
 #include <list>
 #include <cstddef>
+#include <iostream>
+#include "Simulation.h"
 
 using namespace std;
 
@@ -16,7 +18,6 @@ Event::Event(simpleTime start, int prio, simpleTime end, int status, Customer cu
 	this->prio = prio;
 	this->status = status;
 	this->customer = customer;
-	//this->supermarket = supermarket;
 }
 Event::~Event(){
 }
@@ -32,8 +33,8 @@ void Event::execute(list<Event> &eventList, Supermarket *supermarket){
 	//TODO implement
 	list<Event>& eventReturn = eventList;
 	switch(status){
+		//CUSTOMER ARRIVES		
 		case 1:	{
-		
 			//Customer arrives FERTIG
 			supermarket->addCustomerArrived(1);
 			supermarket->addAllCustomer(this->customer);
@@ -53,6 +54,7 @@ void Event::execute(list<Event> &eventList, Supermarket *supermarket){
 			}
 			break;
 		}
+		//CUSTOMER PICKS A CART
 		case 2:{
 			//Customer gets Cart FERTIG
 			endTime = startTime;
@@ -60,17 +62,18 @@ void Event::execute(list<Event> &eventList, Supermarket *supermarket){
 			eventReturn.push_front(generateNextEvent(3,endTime));
 			break;
 		}
+		//CUSTOMER PICKS ITEMS
 		case 3:{
 			//Customer picking Items(Use of Generate Items first)
 			//Werte müssen von dem file noch übernommen werden: FAST FERTIG (Infos entziehen
 			int a;
-			a = this->customer.generateItemAmount(10/*hier*/);
-			this->customer.setItemAmount(a);
 			this->endTime = this->startTime;
-			this->endTime.increaseSeconds(this->customer.getItemAmount() * 10/*hier*/);			
+			int itemChooseTime = Simulation::itemZeit;
+			this->endTime.increaseSeconds(this->customer.getItemAmount() * itemChooseTime/*hier*/);			
 			eventReturn.push_front(generateNextEvent(4,this->endTime));
 			break;
 		}
+		//CUSTOMER SELECTS CASHBOX
 		case 4: {
 			//select cashbox
 			//NICHT FERTIG DA fester for schleifen wert
@@ -78,41 +81,32 @@ void Event::execute(list<Event> &eventList, Supermarket *supermarket){
 			vector<Cashbox>* temp = supermarket->getCashBoxes();
 			int low = 99;
 			int auswahl = 99;
-			for(int i = 0;i < 3; i++){
+			int cashboxAmount = temp->size();
+			for(int i = 0;i < cashboxAmount; i++){
 				if((*temp)[i].getCustQueue().size() < low || low == 99){
 					low = (*temp)[i].getCustQueue().size();
 					auswahl = i;
 					this->customer.setCashAuswahl(i);
 				}
 			}
-			int selection = customer.getCashAuswahl();
 			if((*temp)[this->customer.getCashAuswahl()].getCustQueue().empty() == true){
 				eventReturn.push_front(generateNextEvent(5,this->endTime));	
 			}
 			Cashbox *cashBox = supermarket->getSpecificCashbox(auswahl);
 			Cashbox *cashBox2 = &(*temp)[auswahl];
 			cashBox->addCustQueue(this->customer);
-//new
-			//temp[selection].getCustQueue().push(this->customer);
-
-//old
-	//		this->supermarket.getSpecificCashbox(auswahl).getCustQueue().push(this->customer);
 			break;
 		}
+		//CUSTOMER ARRIVES AND CHECKS IF HE CAN IMMEDIATLY PAY
 		case 5:  {
 			//Customer in Turn for the Cashbox FAST FERTIG (Infos Entziehen)
 			int selectedCashboxIndex =this->customer.getCashAuswahl();
-			//todo delete
-			selectedCashboxIndex = 0;
-			//new
-			vector<Cashbox>* cashboxVector = supermarket->getCashBoxes();
-			Cashbox *selectedCashbox =  &(*cashboxVector)[selectedCashboxIndex];
-
-			//end	
 			Cashbox *temp = supermarket->getSpecificCashbox(selectedCashboxIndex);
-			temp->handleCustomer();
+			temp->handleCustomer(); 
 			this->endTime = this->startTime;
-			this->endTime.increaseSeconds((this->customer.getItemAmount() * 3) + 15);
+			int payTimeProduct = Simulation::zeitProProdukt;
+			int fixPayTime =Simulation::bezahlen;
+			this->endTime.increaseSeconds((this->customer.getItemAmount() * payTimeProduct) + fixPayTime);
 			if(supermarket->getSpecificCashbox(selectedCashboxIndex)->getCustQueue().empty() != true){
 				//?? wouldn't be this->customer sufficent enough? 
 				eventReturn.push_front(generateNextEvent(5,this->endTime,this->customer));
@@ -121,8 +115,8 @@ void Event::execute(list<Event> &eventList, Supermarket *supermarket){
 			eventReturn.push_front(generateNextEvent(6,this->endTime));
 			break;
 		}
+		//CUSTOMER PAYS
 		case 6:{
-			//Customer pays and leaves Supermarket
 			this->endTime = this->startTime;
 			supermarket->addCustomerPaid(1);
 			supermarket->returnCart();
@@ -136,6 +130,7 @@ void Event::execute(list<Event> &eventList, Supermarket *supermarket){
 			//Supermarket opens
 			supermarket->setIsOpen(true);
 			this->endTime = this->startTime;
+			cout << "how to access static fields in event "<<Simulation::kunden<<endl;
 			break;
 		}
 		case 11:{

@@ -8,3 +8,13 @@ zurueck dabei ist es nur der handler
 
 in Eventhandler>>executeEvent 
 mal getQueue mal direkter zugriff
+
+
+--------------------
+warum event 12 rushhour?
+wird doch schon in der simulation gesetzt
+
+was passiert in case 5 genau?
+warum handleCustomer???
+warum wird wenn schlange nicht leer ist ein neues event erstellt mit der endtime?
+-> beim naechsten durchgang wird dann ebenfalls wieder die bezahl zeit erhoeht

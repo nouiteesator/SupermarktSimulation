@@ -30,18 +30,20 @@ int Simulation::simulationen;
 int Simulation::seed1;
 int Simulation::seed2;
 
+
 Simulation::Simulation(){
 	fetchInput(Simulation::file,&Simulation::inputParams);
 	Simulation(true);
 }
 Simulation::Simulation(bool i):supermarket(Simulation::inputParams[0],simpleTime(0,0,0),simpleTime(0+Simulation::inputParams[2],0,0),Simulation::inputParams[1]),
-	realTime(0,0,0),distribution(10),eventQueue()
+	realTime(0,0,0),eventQueue(),distribution(inputParams[5]),itemPoisson(inputParams[4])
 {
 	Simulation::kassen = inputParams[0];
 	Simulation::wagen = inputParams[1];
 	Simulation::dauer = inputParams[2];
 	//Simulation::rushhour = inputParams[3];
 	Simulation::itemWert = inputParams[4];
+	cout<< "item mittelwert "<< itemWert <<endl;
 	Simulation::kunden = inputParams[5];
 	Simulation::itemZeit = inputParams[6];
 	Simulation::zeitProProdukt = inputParams[7];
@@ -50,7 +52,8 @@ Simulation::Simulation(bool i):supermarket(Simulation::inputParams[0],simpleTime
 	Simulation::seed1 = inputParams[10];
 	Simulation::seed2 = inputParams[11];
 	gen.seed(seed1);
-	
+	genForItems.seed(seed2);
+
 	this->preperation();
 	this->runQueue();
 }
@@ -64,7 +67,7 @@ int Simulation::getSeed(){
 }
 
 
-int Simulation::customerStream(int i){
+int Simulation::customerStream(){
 	int amountOfCustomer = distribution(gen);
 	return amountOfCustomer;
 
@@ -77,13 +80,22 @@ void Simulation::generateCustomer(int a, simpleTime start){ //ja ich weiﬂ, kann 
 	for(int i = 0; i < a;i++){
 		temp += arrivalrate;
 		temp2.increaseSeconds(temp);
-		Customer newCustomer(temp2);
+		int itemAmount = generateItemAmount();
+		//nobody goes into a store and buys nothing
+		//but waits at the cashbox for at least 10 secs
+		if( itemAmount <1){
+			itemAmount =1;
+		}
+		Customer newCustomer(temp2, itemAmount);
 		int j = rand() %100 + 1;
 		Event e = generateEvent(temp2,j,temp2,1,newCustomer);
 		eventQueue.addEventQueue(e);
 	}
 }
 
+int Simulation::generateItemAmount(){
+	return itemPoisson(genForItems);
+}
 void Simulation::setAmount(int i){
 	this->amount = i;
 }
@@ -97,22 +109,21 @@ Supermarket& Simulation::getSupermarket(){
 	return this->supermarket;
 }
 void Simulation::preperation(){
+	//start event
 	Event e(simpleTime(0,0,0),1,simpleTime(0,0,0),10,Customer());
 	eventQueue.addEventQueue(e);
+	//close Event 
 	eventQueue.addEventQueue(Event(simpleTime(0+Simulation::dauer,0,0),1,simpleTime(0+Simulation::dauer,0,0),11,Customer()));
+	//double amount of customer event
 	eventQueue.addEventQueue(Event(simpleTime(0+Simulation::dauer-2,0,0),1,simpleTime(0+Simulation::dauer-2,0,0),12,Customer()));
-	//it was never requestet whether there 
-	//is a rushhour or not
 	//theese loops are used to generate all customers 
-	// not so clever because it jams our queue
-
 	simpleTime temp2(0+Simulation::dauer-2,0,0);
 	while(realTime < temp2){
-		generateCustomer(customerStream(Simulation::kunden),realTime);
+		generateCustomer(customerStream(),realTime);
 		realTime.increaseMinutes(1);
 	}
 	while(realTime < simpleTime(Simulation::dauer,0,0)){
-		generateCustomer(customerStream(Simulation::kunden*2),realTime);
+		generateCustomer(customerStream()*2,realTime);
 		realTime.increaseMinutes(1);
 	}
 	realTime = simpleTime(0,0,0);
@@ -120,13 +131,6 @@ void Simulation::preperation(){
 simpleTime Simulation::getRealTime(){
 	return this->realTime;
 }
-void Simulation::setRealTime(simpleTime i){
-	this->realTime = i;
-}
-Eventhandler& Simulation::getEventhandler(){
-	return this->eventQueue;
-}
-
 
 //read the input file and fetch all arguments into the params array
 void Simulation::fetchInput(string pFilePath,vector<int>* pInputParams){
@@ -151,12 +155,14 @@ void Simulation::fetchInput(string pFilePath,vector<int>* pInputParams){
 void Simulation::runQueue(){
 	cout << eventQueue.getEventQueue().size() << endl;
 	while(eventQueue.getEventQueue().empty() != true){
-		cout << eventQueue.getEventQueue().size() << endl;
 		Event e = eventQueue.getEventQueue().top();
 		realTime = e.getEndTime();
 		eventQueue.executeEvent(&supermarket);
 	}
+	cout<<"test how to acces static fields " <<kunden<<endl;
 	cout<<"finish"<<endl;
 	cout<< "last event at "<< realTime.toString()<<endl;
 	cout<<"customer arrived "<<supermarket.getCustomerArrived()<<endl;
+	cout<<"customer payed "<<supermarket.getCustomerPaid()<<endl;
+	cout<<"customer left "<<supermarket.getCustomerArrived() - supermarket.getCustomerPaid()<<endl;
 }

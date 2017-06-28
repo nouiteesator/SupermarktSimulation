@@ -9,6 +9,8 @@
 class Simulation
 {
 	
+	
+public:
 	static std::string file;
 	static std::vector<int> inputParams;
 	static int kassen;
@@ -23,28 +25,25 @@ class Simulation
 	static int simulationen;
 	static int seed1;
 	static int seed2;
-	
-public:
+
 	Simulation();
 	Simulation(bool);
 	~Simulation();
 	int getSeed();
-	int customerStream(int);
+	int customerStream();
 	Supermarket& getSupermarket();
 	void preperation();
 	simpleTime getRealTime();
-	void setRealTime(simpleTime);
-	Eventhandler& getEventhandler();
 	void fetchInput(string, vector<int>*);
 	void testTime();
 	void generateCustomer(int, simpleTime);
 	Event generateEvent(simpleTime, int, simpleTime&, int, Customer&);
 	void setAmount(int);
 	void runQueue();
+	int generateItemAmount();
 
 private:
-	simpleTime realTime; //the simulation time which is
-						//set by events
+	simpleTime realTime; //the simulation time which is set by events
 	int doubleAmountOfCustomers; //0 -> nope 1 yes
 	int itemSpawnMean;  
 	int customerSpawnMean;
@@ -58,6 +57,8 @@ private:
 	Eventhandler eventQueue;
 	simpleTime real;
 	std::poisson_distribution<int> distribution;
+	std::poisson_distribution<int> itemPoisson;
 	default_random_engine gen;
+	default_random_engine genForItems;
 
 };

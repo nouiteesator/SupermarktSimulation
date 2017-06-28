@@ -50,6 +50,4 @@ void Eventhandler::executeEvent(Supermarket *s){
 			eventQueue.push(temp.back());
 		}
 	}
-	cout << getEventQueue().size() << endl;
-	
 }

@@ -2,8 +2,10 @@
 #include "Customer.h"
 #include "simpleTime.h"
 #include <random>
+#include <iostream>
 
 //Konstruktoren
+
 
 Customer::Customer()
 {
@@ -15,9 +17,9 @@ Customer::~Customer()
 }
 
 
-Customer::Customer(simpleTime arrival):waitForCartTime(0),waitForPayTime(0),timeSpent(0,0,0),leaveTime(0,0,0){
+Customer::Customer(simpleTime arrival, int amount):waitForCartTime(0),waitForPayTime(0),timeSpent(0,0,0),leaveTime(0,0,0){
 	arrivalTime = arrival;
-	itemAmount = generateItemAmount(10);
+	itemAmount =amount;
 	cashAuswahl =0;
 }
 
@@ -65,14 +67,6 @@ void Customer::setCashAuswahl(int i){
 }
 
 //Funktionen
-
-//Hat ein Übergabewert, um diese für Simulationsversuche anzupassen oder um andere Werte zu Testen
-int Customer::generateItemAmount(int i){
-	//Seed auf static setzen, um einfache erreichbarkeit zu gewährleisten
-	std::poisson_distribution<int> distribution(i);
-	std::default_random_engine gen(123456);
-	return distribution(gen);
-}
 
 
 

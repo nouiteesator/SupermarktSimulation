@@ -49,8 +49,6 @@ list<Customer>& Supermarket::getAllCustomer(){
 	return this->allCustomer;
 }
 vector<Cashbox>* Supermarket::getCashBoxes(){
-
-	cout<<"in get cashBoxes addres " <<&cashBoxes<<endl;
 	return &cashBoxes;
 }
 simpleTime& Supermarket::getOpenTime(){
