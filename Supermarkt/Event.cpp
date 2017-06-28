@@ -132,6 +132,7 @@ void Event::execute(list<Event> &eventList, Supermarket *supermarket){
 				eventReturn.push_front(generateNextEvent(2,this->endTime,supermarket->getCustWaitForCart().front()));
 				supermarket->getCustWaitForCart().pop();
 			}
+			this->customer.getTimeSpent() = (this->endTime-this->customer.getArrivalTime());
 			break;
 		}
 		case 10:{

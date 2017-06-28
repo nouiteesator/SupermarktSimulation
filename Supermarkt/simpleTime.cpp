@@ -101,6 +101,23 @@ bool simpleTime::operator>(simpleTime st)const{
 	return true;
 }
 
+simpleTime simpleTime::operator-(simpleTime st)const{
+	
+	int tempS = seconds - st.getSeconds();
+	int tempM = minutes - st.getMinutes();
+	int tempH = hours - st.getHours();
+	if(tempS < 0){
+		tempM -= 1;
+		tempS += 60;
+	}
+	if(tempM < 0){
+		tempH -= 1;
+		tempM += 60;
+	}
+	simpleTime temp(tempH,tempM,tempS);
+	return temp;
+}
+
 std::string simpleTime::toString(){
 	std::string retString= std::to_string(hours) + "h " + std::to_string(minutes) + "minuten " + std::to_string(seconds) + "sekunden";
 	return retString;
