@@ -41,7 +41,6 @@ void Eventhandler::executeEvent(Supermarket *s){
 	list<Event> temp;
 	getfirstEvent().execute(temp,s);
 	eventQueue.pop();
-	cout << temp.front().toString() << endl;
 	if(temp.empty() == false){
 	//why dont you use a while/for loop 
 		if(temp.front() == temp.back()){

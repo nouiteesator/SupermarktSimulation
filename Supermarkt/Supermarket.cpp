@@ -5,7 +5,6 @@
 #include "Customer.h"
 #include "simpleTime.h"
 #include "Cashbox.h"
-#include <iostream>
 //Iteratoren für Lists
 
 std::list<Customer>:: iterator ic;
@@ -22,12 +21,10 @@ Supermarket::Supermarket(int c, simpleTime s, simpleTime e, int pAvailableCarts)
 	for(int i; i < c; i++){
 		cashBoxes.push_back(Cashbox(i + 1));
 	}
-	cout<<"address of vector in Supermarket constructor "<<&cashBoxes<<endl;
 
 }
 
 Supermarket::Supermarket(){
-	cout<<"standard constructor of Supermarketis invoked"<<this<<endl;
 }
 
 

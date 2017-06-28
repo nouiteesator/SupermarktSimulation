@@ -65,9 +65,7 @@ int Simulation::getSeed(){
 
 
 int Simulation::customerStream(int i){
-	cout << "customer stream was invoked " << endl;
 	int amountOfCustomer = distribution(gen);
-	cout << "amount of generated customer " << amountOfCustomer << endl;
 	return amountOfCustomer;
 
 }
@@ -99,7 +97,6 @@ Supermarket& Simulation::getSupermarket(){
 	return this->supermarket;
 }
 void Simulation::preperation(){
-	cout<<"calling preperation "<<endl;
 	Event e(simpleTime(0,0,0),1,simpleTime(0,0,0),10,Customer());
 	eventQueue.addEventQueue(e);
 	eventQueue.addEventQueue(Event(simpleTime(0+Simulation::dauer,0,0),1,simpleTime(0+Simulation::dauer,0,0),11,Customer()));
@@ -109,19 +106,15 @@ void Simulation::preperation(){
 	//theese loops are used to generate all customers 
 	// not so clever because it jams our queue
 
-	//simpleTime temp2(0+Simulation::dauer-2,0,0);
-	//debug
-	simpleTime temp2(0,1,0);
+	simpleTime temp2(0+Simulation::dauer-2,0,0);
 	while(realTime < temp2){
 		generateCustomer(customerStream(Simulation::kunden),realTime);
 		realTime.increaseMinutes(1);
 	}
-	/*
 	while(realTime < simpleTime(Simulation::dauer,0,0)){
 		generateCustomer(customerStream(Simulation::kunden*2),realTime);
 		realTime.increaseMinutes(1);
 	}
-	*/
 	realTime = simpleTime(0,0,0);
 }
 simpleTime Simulation::getRealTime(){
@@ -157,12 +150,13 @@ void Simulation::fetchInput(string pFilePath,vector<int>* pInputParams){
 //TODO set the real time
 void Simulation::runQueue(){
 	cout << eventQueue.getEventQueue().size() << endl;
-	Event e = eventQueue.getEventQueue().top();
-	cout << e.toString() << endl;
 	while(eventQueue.getEventQueue().empty() != true){
 		cout << eventQueue.getEventQueue().size() << endl;
+		Event e = eventQueue.getEventQueue().top();
+		realTime = e.getEndTime();
 		eventQueue.executeEvent(&supermarket);
 	}
 	cout<<"finish"<<endl;
+	cout<< "last event at "<< realTime.toString()<<endl;
 	cout<<"customer arrived "<<supermarket.getCustomerArrived()<<endl;
 }

@@ -1,6 +1,5 @@
 #include "Event.h"
 #include "Cashbox.h"
-#include <iostream>
 #include <cstdlib>
 #include <stddef.h>
 #include <list>
@@ -31,7 +30,6 @@ Event::Event(simpleTime start, int priority,int stat){
 //TODO
 void Event::execute(list<Event> &eventList, Supermarket *supermarket){
 	//TODO implement
-	cout << this->status << endl;
 	list<Event>& eventReturn = eventList;
 	switch(status){
 		case 1:	{
@@ -92,9 +90,7 @@ void Event::execute(list<Event> &eventList, Supermarket *supermarket){
 				eventReturn.push_front(generateNextEvent(5,this->endTime));	
 			}
 			Cashbox *cashBox = supermarket->getSpecificCashbox(auswahl);
-			cout<< "casd 4 cashbox address "<<cashBox<<endl;
 			Cashbox *cashBox2 = &(*temp)[auswahl];
-			cout<< "casd 4 cashbox22222 address "<<cashBox2<<endl;
 			cashBox->addCustQueue(this->customer);
 //new
 			//temp[selection].getCustQueue().push(this->customer);
@@ -114,24 +110,15 @@ void Event::execute(list<Event> &eventList, Supermarket *supermarket){
 
 			//end	
 			Cashbox *temp = supermarket->getSpecificCashbox(selectedCashboxIndex);
-			cout<<"case 5 3"<<endl;
 			temp->handleCustomer();
-			cout<<"case 5 4"<<endl;
 			this->endTime = this->startTime;
-			cout<<"case 5 5"<<endl;
 			this->endTime.increaseSeconds((this->customer.getItemAmount() * 3) + 15);
-			cout<<"case 5 6"<<endl;
-			cout<<supermarket->getSpecificCashbox(selectedCashboxIndex)->getCustQueue().empty()<<"blub"<<endl;
 			if(supermarket->getSpecificCashbox(selectedCashboxIndex)->getCustQueue().empty() != true){
-				cout<<"case 5 in if 7"<<endl;
 				//?? wouldn't be this->customer sufficent enough? 
 				eventReturn.push_front(generateNextEvent(5,this->endTime,this->customer));
-				cout<<"case 5 8 before break"<<endl;
 				break;
 			}
-			cout<<"case 5 shouldn t reach"<<endl;
 			eventReturn.push_front(generateNextEvent(6,this->endTime));
-			cout<<"case 5 shouldn t reach part 2"<<endl;
 			break;
 		}
 		case 6:{
