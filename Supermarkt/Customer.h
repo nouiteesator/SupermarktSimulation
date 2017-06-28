@@ -21,6 +21,8 @@ public:
 	void setArrivalTime(simpleTime);
 
 
+
+
 private:
 	int itemAmount;
 	simpleTime arrivalTime;

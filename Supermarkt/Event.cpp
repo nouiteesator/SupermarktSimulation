@@ -37,7 +37,6 @@ void Event::execute(list<Event> &eventList, Supermarket *supermarket){
 		case 1:	{
 			//Customer arrives FERTIG
 			supermarket->addCustomerArrived(1);
-			supermarket->addAllCustomer(this->customer);
 			if(supermarket->getAvailableCarts() == 0){
 				if(supermarket->getCustWaitForCart().size() > 30){
 					if(rand()%100 < 34){
@@ -132,7 +131,8 @@ void Event::execute(list<Event> &eventList, Supermarket *supermarket){
 				eventReturn.push_front(generateNextEvent(2,this->endTime,supermarket->getCustWaitForCart().front()));
 				supermarket->getCustWaitForCart().pop();
 			}
-			this->customer.getTimeSpent() = (this->endTime-this->customer.getArrivalTime());
+			this->customer.setTimeSpent((this->endTime-this->customer.getArrivalTime()));
+			supermarket->addAllCustomer(this->customer);
 			break;
 		}
 		case 10:{

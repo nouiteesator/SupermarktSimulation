@@ -13,6 +13,7 @@ public:
 	bool operator <(simpleTime)const;
 	bool operator >(simpleTime)const;
 	simpleTime operator -(simpleTime)const;
+	simpleTime operator +(simpleTime)const;
 	std::string toString();
 	int getMinutes();
 	int getSeconds();

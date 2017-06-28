@@ -190,7 +190,13 @@ void Simulation::runQueue(){
 */
 void Simulation::generateReport(){
 
+	int custArrived =supermarket.getCustomerArrived();
+	list<Customer>allCustomer =supermarket.getAllCustomer();
 	string reportPath ="Results.txt";
+	simpleTime max(0,0,1);
+	simpleTime min(99,0,1);
+	simpleTime avg(0,0,0);
+	simpleTime tmpComp(0,0,1);
 	//set the report open for output operations and append results if 
 	//file allready exists
 	ofstream report (reportPath, ios::out | ios::app);
@@ -198,8 +204,34 @@ void Simulation::generateReport(){
   	{
    		cerr<< "Error could not open the "<<reportPath<<" file "<<endl;
     	report.close();
+    	return;
   	}
-  	else{
+  	// 335 51 38
+  		//get max and min value and average time for customer
+  	for(std::list<Customer>::iterator it=allCustomer.begin(); it != allCustomer.end();it++){
+  		 simpleTime spent = it->getTimeSpent();
+  		 avg = avg+spent ;
+  		 cout<< avg.toString()<<endl;
+  		 if(spent > max){
+  		 	max = spent;
+  		 }
+  		 if(spent < min && spent > tmpComp){
+  		 	min =spent;
+  		 }
+  	}
+  	int avgSec =avg.getSeconds();
+  	int avgMinutes = avg.getMinutes();
+  	int avgHours =avg.getHours();
+  	cout<<"seconds "<<avgSec<<endl;;
+  	cout<<"minutes "<<avgMinutes<<endl;;
+  	cout<<"hours "<<avgHours<<endl;;
+  	int totalSecs = avgSec +avgMinutes*60 +avgHours*60*60;
+  	int avgSecs= totalSecs/supermarket.getCustomerPaid();
+  	cout<< "cust paid "<<supermarket.getCustomerPaid()<<endl;
+  	cout<< "average seconds "<<avgSecs<<endl;
+  	simpleTime output(0,0,0);
+  	output.increaseSeconds(avgSecs);
+
   	report<<"================Start of Simulation=========\n";
   	report<<"++++++++++++++++Eingabewerte++++++++++++++++\n";
   	report<<"Anzahl der Kassen "<<kassen<<"\n";
@@ -215,18 +247,21 @@ void Simulation::generateReport(){
 
   	report<<"++++++++++++++++Ausgabewerte++++++++++++++++\n";
   	report<< "supermarket close time  "<< realTime.toString()<<"\n";
-	report<<"customer arrived "<<supermarket.getCustomerArrived()<<"\n";
+	report<<"customer arrived "<<custArrived<<"\n";
 	report<<"customer payed "<<supermarket.getCustomerPaid()<<"\n";
-	report<<"customer left "<<supermarket.getCustomerArrived() - supermarket.getCustomerPaid()<<"\n";
-
+	report<<"customer left "<<custArrived - supermarket.getCustomerPaid()<<"\n";
+	report<<"customer min time spent "<<min.toString()<<"\n";
+	report<<"customer max time spent  "<<max.toString()<<"\n";
+	report<<"customer average time spent "<<output.toString()<<"\n";
 		for(int i=0; i < supermarket.getCashBoxes()->size(); i++){
 	 report<< "Kasse: " << i+1 << " Aktive Zeit: " << supermarket.getSpecificCashbox(i)->getUseTime().toString() << "\n";
 	}  	
+
 
   		//here comes real data
   	report<<"====================+END OF SIMULATION==================\n";
   	report<<"\n";
   	report<<"\n";
   	report.close();	
-  	}
- } 
+}
+ 
