@@ -20,7 +20,7 @@ public:
 	int getPrio();
 	std::string toString();
 	Customer& getCustomer();
-	Supermarket& getSupermarket();
+	Supermarket getSupermarket();
 	Event generateNextEvent(int,simpleTime&);
 	Event generateNextEvent(int,simpleTime&,Customer&);
 	bool operator==(const Event &e)const;

@@ -5,12 +5,14 @@
 #include "Customer.h"
 #include "simpleTime.h"
 #include "Cashbox.h"
-
+#include <iostream>
 //Iteratoren für Lists
 
 std::list<Customer>:: iterator ic;
 
 //constructoren
+
+
 
 Supermarket::Supermarket(int c, simpleTime s, simpleTime e, int pAvailableCarts):customerArrived(0),customerPaid(0),
 	availableCarts(pAvailableCarts),custWaitForCart(),allCustomer(), isOpen(false),cashBoxes()
@@ -20,10 +22,12 @@ Supermarket::Supermarket(int c, simpleTime s, simpleTime e, int pAvailableCarts)
 	for(int i; i < c; i++){
 		cashBoxes.push_back(Cashbox(i + 1));
 	}
+	cout<<"address of vector in Supermarket constructor "<<&cashBoxes<<endl;
 
 }
 
 Supermarket::Supermarket(){
+	cout<<"standard constructor of Supermarketis invoked"<<this<<endl;
 }
 
 
@@ -47,8 +51,10 @@ queue<Customer>& Supermarket::getCustWaitForCart(){
 list<Customer>& Supermarket::getAllCustomer(){
 	return this->allCustomer;
 }
-vector<Cashbox>& Supermarket::getCashBoxes(){
-	return this->cashBoxes;
+vector<Cashbox>* Supermarket::getCashBoxes(){
+
+	cout<<"in get cashBoxes addres " <<&cashBoxes<<endl;
+	return &cashBoxes;
 }
 simpleTime& Supermarket::getOpenTime(){
 	return this->openTime;
@@ -60,7 +66,7 @@ simpleTime& Supermarket::getActualCloseTime(){
 	return this->actualCloseTime;
 }
 Cashbox& Supermarket::getSpecificCashbox(int i){
-	return cashBoxes[i];
+	return this->cashBoxes[i];
 }
 bool Supermarket::getIsOpen(){
 	return this->isOpen;

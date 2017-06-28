@@ -11,13 +11,13 @@ using namespace std;
 Event::Event(){
 }
 
-Event::Event(simpleTime start, int prio, simpleTime end, int status, Customer customer, Supermarket &supermarket)
-:supermarket(supermarket){
+Event::Event(simpleTime start, int prio, simpleTime end, int status, Customer customer, Supermarket &supermarket){
 	this->startTime = start;
 	this->endTime = end;
 	this->prio = prio;
 	this->status = status;
 	this->customer = customer;
+	this->supermarket = supermarket;
 	//this->supermarket = supermarket;
 }
 Event::~Event(){
@@ -78,18 +78,20 @@ void Event::execute(list<Event> &eventList){
 			//select cashbox
 			//NICHT FERTIG DA fester for schleifen wert
 			this->endTime = this->startTime;
-			vector<Cashbox>& temp = this->supermarket.getCashBoxes();
+			vector<Cashbox>* temp = this->supermarket.getCashBoxes();
+			cout<<"case 4 address temp "<< temp <<endl;
+			cout<<"case 4 address vector cashboxes;"<<this->supermarket.getCashBoxes()<<endl;
 			int low = 99;
 			int auswahl = 99;
 			for(int i = 0;i < 3; i++){
-				if(temp[i].getCustQueue().size() < low || low == 99){
-					low = temp[i].getCustQueue().size();
+				if((*temp)[i].getCustQueue().size() < low || low == 99){
+					low = (*temp)[i].getCustQueue().size();
 					auswahl = i;
 					this->customer.setCashAuswahl(i);
 				}
 			}
 			int selection = customer.getCashAuswahl();
-			if(temp[this->customer.getCashAuswahl()].getCustQueue().empty() == true){
+			if((*temp)[this->customer.getCashAuswahl()].getCustQueue().empty() == true){
 				eventReturn.push_front(generateNextEvent(5,this->endTime));	
 			}
 			this->supermarket.getSpecificCashbox(auswahl).addCustQueue(this->customer);
@@ -111,6 +113,12 @@ void Event::execute(list<Event> &eventList){
 			cout<<"case 5 supermarket "<<&supermarket<<endl;
 			cout<<"case 5 cashbox "<<&supermarket.getSpecificCashbox(0)<<endl;
 			int selectedCashboxIndex =this->customer.getCashAuswahl();
+			selectedCashboxIndex = 0;
+			//new
+			vector<Cashbox>* blub = this->supermarket.getCashBoxes();
+			cout<<"case 5 NEW SIZE "<<(*blub)[selectedCashboxIndex].getCustQueue().size()<<endl;
+			cout<<"case 5 NEW  address blub!!!! "<<blub<<endl;
+			//end
 			cout<<this->supermarket.getSpecificCashbox(selectedCashboxIndex).getCustQueue().size()<<"laenge in 5"<<endl;
 			cout<<"address of queue "<<&this->supermarket.getSpecificCashbox(selectedCashboxIndex).getCustQueue()<<endl;
 			cout<<"case 5 2"<<endl;
@@ -241,4 +249,8 @@ bool Event::operator==(const Event &e)const{
 
 Customer & Event::getCustomer(){
 	return this->customer;
+}
+
+Supermarket Event::getSupermarket(){
+	return supermarket;
 }

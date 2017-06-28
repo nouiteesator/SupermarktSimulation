@@ -16,7 +16,7 @@ public:
 	int getCustomerPaid();
 	int getAvailableCarts();
 	queue<Customer>& getCustWaitForCart();
-	vector<Cashbox>& getCashBoxes();
+	vector<Cashbox>* getCashBoxes();
 	simpleTime& getOpenTime();
 	simpleTime& getCloseTime();
 	simpleTime& getActualCloseTime();

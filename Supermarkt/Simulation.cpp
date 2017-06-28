@@ -99,10 +99,10 @@ Supermarket& Simulation::getSupermarket(){
 	return this->supermarket;
 }
 void Simulation::preperation(){
-	Event e(simpleTime(0,0,0),1,simpleTime(0,0,0),10,Customer(),this->supermarket);
+	Event e(simpleTime(0,0,0),1,simpleTime(0,0,0),10,Customer(),this->getSupermarket());
 	eventQueue.addEventQueue(e);
-	eventQueue.addEventQueue(Event(simpleTime(0+Simulation::dauer,0,0),1,simpleTime(0+Simulation::dauer,0,0),11,Customer(),this->supermarket));
-	eventQueue.addEventQueue(Event(simpleTime(0+Simulation::dauer-2,0,0),1,simpleTime(0+Simulation::dauer-2,0,0),12,Customer(),this->supermarket));
+	eventQueue.addEventQueue(Event(simpleTime(0+Simulation::dauer,0,0),1,simpleTime(0+Simulation::dauer,0,0),11,Customer(),this->getSupermarket()));
+	eventQueue.addEventQueue(Event(simpleTime(0+Simulation::dauer-2,0,0),1,simpleTime(0+Simulation::dauer-2,0,0),12,Customer(),this->getSupermarket()));
 	//it was never requestet whether there 
 	//is a rushhour or not
 	//theese loops are used to generate all customers 
