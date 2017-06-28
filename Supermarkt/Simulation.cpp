@@ -165,4 +165,8 @@ void Simulation::runQueue(){
 	cout<<"customer arrived "<<supermarket.getCustomerArrived()<<endl;
 	cout<<"customer payed "<<supermarket.getCustomerPaid()<<endl;
 	cout<<"customer left "<<supermarket.getCustomerArrived() - supermarket.getCustomerPaid()<<endl;
+	for(int i; i < supermarket.getCashBoxes()->size(); i++){
+		cout << "Kasse: " << i+1 << " Aktive Zeit: " << supermarket.getSpecificCashbox(i)->getUseTime().toString() << endl;
+	}
+	cout << supermarket.getAvailableCarts() << endl;
 }
