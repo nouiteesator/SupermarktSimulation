@@ -1,5 +1,6 @@
 #pragma once
 #include "Customer.h"
+#include "simpleTime.h"
 #include <queue>
 using namespace std;
 class Cashbox{
@@ -14,11 +15,12 @@ class Cashbox{
 		bool getCashUsed();
 		queue<Customer>& getCustQueue();
 		Customer& getCustQueueFirst();
-		void addCustServed(int);
+		void addCustServed();
 		void setCashBoxUsed(int);
 		void setCashUsed(bool);
 		void addCustQueue(Customer);
 		void deleteCustQueue();
+		simpleTime& getUseTime();
 		
 	private:
 		int custServed;
@@ -26,4 +28,5 @@ class Cashbox{
 		int cashBoxID;
 		int cashBoxUsed;
 		bool cashUsed;
+		simpleTime useTime;
 };

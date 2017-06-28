@@ -90,35 +90,40 @@ void Event::execute(list<Event> &eventList, Supermarket *supermarket){
 				}
 			}
 			if((*temp)[this->customer.getCashAuswahl()].getCustQueue().empty() == true){
-				eventReturn.push_front(generateNextEvent(5,this->endTime));	
+				eventReturn.push_front(generateNextEvent(5,this->endTime));
+				supermarket->getSpecificCashbox(this->customer.getCashAuswahl())->setCashUsed(true);	
 			}
 			Cashbox *cashBox = supermarket->getSpecificCashbox(auswahl);
 			Cashbox *cashBox2 = &(*temp)[auswahl];
 			cashBox->addCustQueue(this->customer);
 			break;
+			
 		}
 		//CUSTOMER ARRIVES AND CHECKS IF HE CAN IMMEDIATLY PAY
 		case 5:  {
 			//Customer in Turn for the Cashbox FAST FERTIG (Infos Entziehen)
 			int selectedCashboxIndex =this->customer.getCashAuswahl();
 			Cashbox *temp = supermarket->getSpecificCashbox(selectedCashboxIndex);
-			temp->handleCustomer(); 
 			this->endTime = this->startTime;
 			int payTimeProduct = Simulation::zeitProProdukt;
 			int fixPayTime =Simulation::bezahlen;
 			this->endTime.increaseSeconds((this->customer.getItemAmount() * payTimeProduct) + fixPayTime);
-			//checking, if the Queue of Customer of the selected Cashbox is filled to generate the next Event for the Customer
-			if(supermarket->getSpecificCashbox(selectedCashboxIndex)->getCustQueue().empty() != true){
-				//generate Event for Customer that is behind this->Customer in the Cashbox-Queue. 
-				cout<<" case 5 if"<<endl;
-				eventReturn.push_front(generateNextEvent(5,this->endTime,temp->getCustQueue().front()));
+			if(supermarket->getSpecificCashbox(this->customer.getCashAuswahl())->getCashUsed() == true){
+				supermarket->getSpecificCashbox(this->customer.getCashAuswahl())->getUseTime().increaseSeconds((this->customer.getItemAmount() * payTimeProduct) + fixPayTime);
+
 			}
-			eventReturn.push_front(generateNextEvent(6,this->endTime));
+			//checking, if the Queue of Customer of the selected Cashbox is filled to generate the next Event for the Customer
+			eventReturn.push_front(generateNextEvent(6,this->endTime)); 
 			break;
 		}
 		//CUSTOMER PAYS
 		case 6:{
 			this->endTime = this->startTime;
+			supermarket->getSpecificCashbox(this->customer.getCashAuswahl())->handleCustomer();
+			if(supermarket->getSpecificCashbox(this->customer.getCashAuswahl())->getCustQueue().empty() != true){
+				//generate Event for Customer that is behind this->Customer in the Cashbox-Queue. 
+				eventReturn.push_front(generateNextEvent(5,this->endTime,supermarket->getSpecificCashbox(this->customer.getCashAuswahl())->getCustQueue().front()));
+			}
 			supermarket->addCustomerPaid(1);
 			supermarket->returnCart();
 			//Checking if the queue for getting a Cart is filled. You can use supermarket->getAvailableCarts() == 0 too

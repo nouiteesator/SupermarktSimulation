@@ -10,7 +10,7 @@ std::list<int>:: iterator it;
 
 //Konstruktoren
 
-Cashbox::Cashbox(int i):custServed(0),cashBoxUsed(0),cashUsed(false),custQueue(){
+Cashbox::Cashbox(int i):custServed(0),cashBoxUsed(0),cashUsed(false),custQueue(),useTime(simpleTime(0,0,0)){
 	this->cashBoxID = i;
 }
 
@@ -41,11 +41,14 @@ queue<Customer>& Cashbox::getCustQueue(){
 Customer& Cashbox::getCustQueueFirst(){
 	return this->custQueue.front();
 }
+simpleTime& Cashbox::getUseTime(){
+	return this->useTime;
+}
 
 //setter
 
-void Cashbox::addCustServed(int i){
-	this->custServed += i;
+void Cashbox::addCustServed(){
+	this->custServed += 1;
 }
 void Cashbox::setCashBoxUsed(int i){
 	this->cashBoxUsed = i;
@@ -64,4 +67,5 @@ void Cashbox::deleteCustQueue(){
 
 void Cashbox::handleCustomer(){
 	this->custQueue.pop();
+	addCustServed();
 }

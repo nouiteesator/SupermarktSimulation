@@ -5,8 +5,8 @@
 #itemMittelwert 10
 #kundenMittelwert 10
 #zeitAuswahlEinesProdukts 10
-#kassenbedienzeitProProdukt 3
-#zeitBezahlvorgang 15
+#kassenbedienzeitProProdukt 1
+#zeitBezahlvorgang 5
 #amountsOfSimulation 3
 #seed   123456789
 #seedfuerItem 987654321

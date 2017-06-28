@@ -161,7 +161,6 @@ void Simulation::runQueue(){
 	}
 	cout<<"test how to acces static fields " <<kunden<<endl;
 	cout<<"finish"<<endl;
-
 }
 
 
@@ -219,7 +218,10 @@ void Simulation::generateReport(){
 	report<<"customer arrived "<<supermarket.getCustomerArrived()<<"\n";
 	report<<"customer payed "<<supermarket.getCustomerPaid()<<"\n";
 	report<<"customer left "<<supermarket.getCustomerArrived() - supermarket.getCustomerPaid()<<"\n";
-  	
+
+		for(int i=0; i < supermarket.getCashBoxes()->size(); i++){
+	 report<< "Kasse: " << i+1 << " Aktive Zeit: " << supermarket.getSpecificCashbox(i)->getUseTime().toString() << "\n";
+	}  	
 
   		//here comes real data
   	report<<"====================+END OF SIMULATION==================\n";
