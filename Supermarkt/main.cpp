@@ -17,22 +17,6 @@
 int main(int argc, char** argv) {
 	using namespace std;
 	Simulation s;
-	int i;
-	s.getEventhandler().addEventQueue(Event());
-	while(s.getEventhandler().getEventQueue().empty() != true){
-		s.getEventhandler().executeEvent();
-		
-		i++;
-	}
-	//debug test whether this does work
-	/*while(s.getEventhandler().getEventQueue().empty() != true){
-		simpleTime i = s.getEventhandler().executeEvent();
-		s.setRealTime(i);
-	}
-	s.getSupermarket().setActualCloseTime(realTime);
-	*/
-	cout << s.getSupermarket().getCustomerArrived() << endl;
-	
 	return 0;
 }
-
+	

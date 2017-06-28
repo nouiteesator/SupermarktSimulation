@@ -9,10 +9,10 @@
 class Event{
 
 public:
-	Event(simpleTime, int, simpleTime, int, Customer, Supermarket&);
+	Event(simpleTime, int, simpleTime, int, Customer);
 	Event();
 	~Event();
-	void execute(list<Event>&); //needs to be reviewed 
+	void execute(list<Event>&, Supermarket*); //needs to be reviewed 
 	bool operator>(const Event &e)const;
 	bool operator<(const Event &e)const;
 	simpleTime& getStartTime();
@@ -20,7 +20,6 @@ public:
 	int getPrio();
 	std::string toString();
 	Customer& getCustomer();
-	Supermarket getSupermarket();
 	Event generateNextEvent(int,simpleTime&);
 	Event generateNextEvent(int,simpleTime&,Customer&);
 	bool operator==(const Event &e)const;
@@ -31,5 +30,4 @@ private:
 	simpleTime endTime;
 	int status;
 	Customer customer;
-	Supermarket supermarket;
 };

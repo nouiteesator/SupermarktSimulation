@@ -38,7 +38,7 @@ public:
 	void fetchInput(string, vector<int>*);
 	void testTime();
 	void generateCustomer(int, simpleTime);
-	Event generateEvent(simpleTime, int, simpleTime&, int, Customer&, Supermarket&);
+	Event generateEvent(simpleTime, int, simpleTime&, int, Customer&);
 	void setAmount(int);
 	void runQueue();
 

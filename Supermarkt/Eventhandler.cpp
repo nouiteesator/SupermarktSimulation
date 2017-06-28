@@ -36,10 +36,10 @@ void Eventhandler::deleteEventQueue(){
 
 //Funktionen
 
-void Eventhandler::executeEvent(){
+void Eventhandler::executeEvent(Supermarket *s){
 
 	list<Event> temp;
-	getfirstEvent().execute(temp);
+	getfirstEvent().execute(temp,s);
 	eventQueue.pop();
 	cout << temp.front().toString() << endl;
 	if(temp.empty() == false){

@@ -3,6 +3,7 @@
 #include <vector>
 #include "Event.h"
 #include "simpleTime.h"
+#include "Supermarket.h"
 
 class Eventhandler{
 	public:
@@ -12,7 +13,7 @@ class Eventhandler{
 		void addEventQueue(Event);
 		void deleteEventQueue();
 		Event getfirstEvent();
-		void executeEvent();
+		void executeEvent(Supermarket *);
 		
 	private:
 		priority_queue<Event, vector<Event>,greater<Event>> eventQueue;

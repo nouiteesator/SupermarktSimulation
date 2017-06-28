@@ -81,7 +81,7 @@ void Simulation::generateCustomer(int a, simpleTime start){ //ja ich weiß, kann 
 		temp2.increaseSeconds(temp);
 		Customer newCustomer(temp2);
 		int j = rand() %100 + 1;
-		Event e = generateEvent(temp2,j,temp2,1,newCustomer,this->getSupermarket());
+		Event e = generateEvent(temp2,j,temp2,1,newCustomer);
 		eventQueue.addEventQueue(e);
 	}
 }
@@ -90,8 +90,8 @@ void Simulation::setAmount(int i){
 	this->amount = i;
 }
 
-Event Simulation::generateEvent(simpleTime s, int p, simpleTime& e, int st, Customer &c, Supermarket &su){
-	Event retE(s,p,e,st,c,su);
+Event Simulation::generateEvent(simpleTime s, int p, simpleTime& e, int st, Customer &c){
+	Event retE(s,p,e,st,c);
 	return retE;
 }
 
@@ -99,10 +99,11 @@ Supermarket& Simulation::getSupermarket(){
 	return this->supermarket;
 }
 void Simulation::preperation(){
-	Event e(simpleTime(0,0,0),1,simpleTime(0,0,0),10,Customer(),this->getSupermarket());
+	cout<<"calling preperation "<<endl;
+	Event e(simpleTime(0,0,0),1,simpleTime(0,0,0),10,Customer());
 	eventQueue.addEventQueue(e);
-	eventQueue.addEventQueue(Event(simpleTime(0+Simulation::dauer,0,0),1,simpleTime(0+Simulation::dauer,0,0),11,Customer(),this->getSupermarket()));
-	eventQueue.addEventQueue(Event(simpleTime(0+Simulation::dauer-2,0,0),1,simpleTime(0+Simulation::dauer-2,0,0),12,Customer(),this->getSupermarket()));
+	eventQueue.addEventQueue(Event(simpleTime(0+Simulation::dauer,0,0),1,simpleTime(0+Simulation::dauer,0,0),11,Customer()));
+	eventQueue.addEventQueue(Event(simpleTime(0+Simulation::dauer-2,0,0),1,simpleTime(0+Simulation::dauer-2,0,0),12,Customer()));
 	//it was never requestet whether there 
 	//is a rushhour or not
 	//theese loops are used to generate all customers 
@@ -122,8 +123,6 @@ void Simulation::preperation(){
 	}
 	*/
 	realTime = simpleTime(0,0,0);
-	cout << eventQueue.getEventQueue().size() << endl;
-	cout << supermarket.getCustomerArrived() << endl;
 }
 simpleTime Simulation::getRealTime(){
 	return this->realTime;
@@ -162,6 +161,8 @@ void Simulation::runQueue(){
 	cout << e.toString() << endl;
 	while(eventQueue.getEventQueue().empty() != true){
 		cout << eventQueue.getEventQueue().size() << endl;
-		eventQueue.executeEvent();
+		eventQueue.executeEvent(&supermarket);
 	}
+	cout<<"finish"<<endl;
+	cout<<"customer arrived "<<supermarket.getCustomerArrived()<<endl;
 }

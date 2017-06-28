@@ -65,8 +65,8 @@ simpleTime& Supermarket::getCloseTime(){
 simpleTime& Supermarket::getActualCloseTime(){
 	return this->actualCloseTime;
 }
-Cashbox& Supermarket::getSpecificCashbox(int i){
-	return this->cashBoxes[i];
+Cashbox* Supermarket::getSpecificCashbox(int i){
+	return &this->cashBoxes[i];
 }
 bool Supermarket::getIsOpen(){
 	return this->isOpen;

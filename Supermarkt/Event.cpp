@@ -11,13 +11,12 @@ using namespace std;
 Event::Event(){
 }
 
-Event::Event(simpleTime start, int prio, simpleTime end, int status, Customer customer, Supermarket &supermarket){
+Event::Event(simpleTime start, int prio, simpleTime end, int status, Customer customer){
 	this->startTime = start;
 	this->endTime = end;
 	this->prio = prio;
 	this->status = status;
 	this->customer = customer;
-	this->supermarket = supermarket;
 	//this->supermarket = supermarket;
 }
 Event::~Event(){
@@ -30,7 +29,7 @@ Event::Event(simpleTime start, int priority,int stat){
 }*/
 
 //TODO
-void Event::execute(list<Event> &eventList){
+void Event::execute(list<Event> &eventList, Supermarket *supermarket){
 	//TODO implement
 	cout << this->status << endl;
 	list<Event>& eventReturn = eventList;
@@ -38,20 +37,20 @@ void Event::execute(list<Event> &eventList){
 		case 1:	{
 		
 			//Customer arrives FERTIG
-			this->supermarket.addCustomerArrived(1);
-			this->supermarket.addAllCustomer(this->customer);
-			if(this->supermarket.getAvailableCarts() == 0){
-				if(this->supermarket.getCustWaitForCart().size() > 30){
+			supermarket->addCustomerArrived(1);
+			supermarket->addAllCustomer(this->customer);
+			if(supermarket->getAvailableCarts() == 0){
+				if(supermarket->getCustWaitForCart().size() > 30){
 					if(rand()%100 < 34){
 						break;
 					}else{	
-						supermarket.addCustWaitForCart(customer);
+						supermarket->addCustWaitForCart(customer);
 					}
 				}else{	
-					supermarket.addCustWaitForCart(customer);
+					supermarket->addCustWaitForCart(customer);
 				}
 			}else{
-				supermarket.takeCart();
+				supermarket->takeCart();
 				eventReturn.push_front(generateNextEvent(3,this->endTime,customer));
 			}
 			break;
@@ -59,7 +58,7 @@ void Event::execute(list<Event> &eventList){
 		case 2:{
 			//Customer gets Cart FERTIG
 			endTime = startTime;
-			supermarket.takeCart();
+			supermarket->takeCart();
 			eventReturn.push_front(generateNextEvent(3,endTime));
 			break;
 		}
@@ -78,9 +77,7 @@ void Event::execute(list<Event> &eventList){
 			//select cashbox
 			//NICHT FERTIG DA fester for schleifen wert
 			this->endTime = this->startTime;
-			vector<Cashbox>* temp = this->supermarket.getCashBoxes();
-			cout<<"case 4 address temp "<< temp <<endl;
-			cout<<"case 4 address vector cashboxes;"<<this->supermarket.getCashBoxes()<<endl;
+			vector<Cashbox>* temp = supermarket->getCashBoxes();
 			int low = 99;
 			int auswahl = 99;
 			for(int i = 0;i < 3; i++){
@@ -94,47 +91,41 @@ void Event::execute(list<Event> &eventList){
 			if((*temp)[this->customer.getCashAuswahl()].getCustQueue().empty() == true){
 				eventReturn.push_front(generateNextEvent(5,this->endTime));	
 			}
-			this->supermarket.getSpecificCashbox(auswahl).addCustQueue(this->customer);
+			Cashbox *cashBox = supermarket->getSpecificCashbox(auswahl);
+			cout<< "casd 4 cashbox address "<<cashBox<<endl;
+			Cashbox *cashBox2 = &(*temp)[auswahl];
+			cout<< "casd 4 cashbox22222 address "<<cashBox2<<endl;
+			cashBox->addCustQueue(this->customer);
 //new
 			//temp[selection].getCustQueue().push(this->customer);
 
-			cout<<"case 4 supermarket "<<&supermarket<<endl;
-			cout<<"case 4 cashbox "<<&supermarket.getSpecificCashbox(0)<<endl;
-			cout<< this->supermarket.getSpecificCashbox(auswahl).getCustQueue().size()<<" in case 4 laenge"<<endl;
-			cout<<" address of case 4 "<<&this->supermarket.getSpecificCashbox(auswahl).getCustQueue()<<endl;
 //old
 	//		this->supermarket.getSpecificCashbox(auswahl).getCustQueue().push(this->customer);
 			break;
 		}
 		case 5:  {
 			//Customer in Turn for the Cashbox FAST FERTIG (Infos Entziehen)
-			cout<<"case 5 ist kacke"<<endl;
-
-			cout<<"case 5 supermarket "<<&supermarket<<endl;
-			cout<<"case 5 cashbox "<<&supermarket.getSpecificCashbox(0)<<endl;
 			int selectedCashboxIndex =this->customer.getCashAuswahl();
+			//todo delete
 			selectedCashboxIndex = 0;
 			//new
-			vector<Cashbox>* blub = this->supermarket.getCashBoxes();
-			cout<<"case 5 NEW SIZE "<<(*blub)[selectedCashboxIndex].getCustQueue().size()<<endl;
-			cout<<"case 5 NEW  address blub!!!! "<<blub<<endl;
-			//end
-			cout<<this->supermarket.getSpecificCashbox(selectedCashboxIndex).getCustQueue().size()<<"laenge in 5"<<endl;
-			cout<<"address of queue "<<&this->supermarket.getSpecificCashbox(selectedCashboxIndex).getCustQueue()<<endl;
-			cout<<"case 5 2"<<endl;
-			Cashbox temp = this->supermarket.getSpecificCashbox(selectedCashboxIndex);
+			vector<Cashbox>* cashboxVector = supermarket->getCashBoxes();
+			Cashbox *selectedCashbox =  &(*cashboxVector)[selectedCashboxIndex];
+
+			//end	
+			Cashbox *temp = supermarket->getSpecificCashbox(selectedCashboxIndex);
 			cout<<"case 5 3"<<endl;
-			temp.handleCustomer();
+			temp->handleCustomer();
 			cout<<"case 5 4"<<endl;
 			this->endTime = this->startTime;
 			cout<<"case 5 5"<<endl;
 			this->endTime.increaseSeconds((this->customer.getItemAmount() * 3) + 15);
 			cout<<"case 5 6"<<endl;
-			cout<<this->supermarket.getSpecificCashbox(selectedCashboxIndex).getCustQueue().empty()<<"blub"<<endl;
-			if(this->supermarket.getSpecificCashbox(selectedCashboxIndex).getCustQueue().empty() != true){
+			cout<<supermarket->getSpecificCashbox(selectedCashboxIndex)->getCustQueue().empty()<<"blub"<<endl;
+			if(supermarket->getSpecificCashbox(selectedCashboxIndex)->getCustQueue().empty() != true){
 				cout<<"case 5 in if 7"<<endl;
 				//?? wouldn't be this->customer sufficent enough? 
-				eventReturn.push_front(generateNextEvent(5,this->endTime,this->supermarket.getSpecificCashbox(selectedCashboxIndex).getCustQueue().front()));
+				eventReturn.push_front(generateNextEvent(5,this->endTime,this->customer));
 				cout<<"case 5 8 before break"<<endl;
 				break;
 			}
@@ -146,29 +137,29 @@ void Event::execute(list<Event> &eventList){
 		case 6:{
 			//Customer pays and leaves Supermarket
 			this->endTime = this->startTime;
-			this->supermarket.addCustomerPaid(1);
-			this->supermarket.returnCart();
-			if(this->supermarket.getCustWaitForCart().empty() != true){
-				eventReturn.push_front(generateNextEvent(2,this->endTime,this->supermarket.getCustWaitForCart().front()));
-				this->supermarket.getCustWaitForCart().pop();
+			supermarket->addCustomerPaid(1);
+			supermarket->returnCart();
+			if(supermarket->getCustWaitForCart().empty() != true){
+				eventReturn.push_front(generateNextEvent(2,this->endTime,this->customer));
+				supermarket->getCustWaitForCart().pop();
 			}
 			break;
 		}
 		case 10:{
 			//Supermarket opens
-			this->supermarket.setIsOpen(true);
+			supermarket->setIsOpen(true);
 			this->endTime = this->startTime;
 			break;
 		}
 		case 11:{
 			//Supermarket closes
-			this->supermarket.setIsOpen(false);
+			supermarket->setIsOpen(false);
 			this->endTime = this->startTime;
 			break;
 		}
 		case 12:{
 			//Rushhour
-			this->supermarket.setRushHour(true);
+			supermarket->setRushHour(true);
 			this->endTime = this->startTime;
 			this->endTime.increaseMinutes(120);
 			break;
@@ -228,12 +219,12 @@ bool Event::operator<(const Event &e)const{
 }
 
 Event Event::generateNextEvent(int s, simpleTime &start){
-	Event event(start,this->getPrio(),start,s,this->customer,this->supermarket);
+	Event event(start,this->getPrio(),start,s,this->customer);
 	return event;
 }
 
 Event Event::generateNextEvent(int s, simpleTime &start, Customer &c){
-	Event newEvent(start,this->getPrio()+rand() %10,start,s,c,this->supermarket);
+	Event newEvent(start,this->getPrio()+rand() %10,start,s,c);
 	return newEvent;
 }
 
@@ -249,8 +240,4 @@ bool Event::operator==(const Event &e)const{
 
 Customer & Event::getCustomer(){
 	return this->customer;
-}
-
-Supermarket Event::getSupermarket(){
-	return supermarket;
 }

@@ -31,7 +31,7 @@ public:
 	void setActualCloseTime(simpleTime);
 	void addAllCustomer(Customer&);
 	void deleteCustWaitForCart();
-	Cashbox& getSpecificCashbox(int);
+	Cashbox* getSpecificCashbox(int);
 	bool getIsOpen();
 	void setIsOpen(bool);
 	void takeCart();
