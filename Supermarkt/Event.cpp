@@ -107,9 +107,10 @@ void Event::execute(list<Event> &eventList, Supermarket *supermarket){
 			int payTimeProduct = Simulation::zeitProProdukt;
 			int fixPayTime =Simulation::bezahlen;
 			this->endTime.increaseSeconds((this->customer.getItemAmount() * payTimeProduct) + fixPayTime);
+			//checking, if the Queue of Customer of the selected Cashbox is filled to generate the next Event for the Customer
 			if(supermarket->getSpecificCashbox(selectedCashboxIndex)->getCustQueue().empty() != true){
-				//?? wouldn't be this->customer sufficent enough? 
-				eventReturn.push_front(generateNextEvent(5,this->endTime,this->customer));
+				//generate Event for Customer that is behind this->Customer in the Cashbox-Queue. 
+				eventReturn.push_front(generateNextEvent(5,this->endTime,temp->getCustQueue().front()));
 				break;
 			}
 			eventReturn.push_front(generateNextEvent(6,this->endTime));
@@ -120,8 +121,10 @@ void Event::execute(list<Event> &eventList, Supermarket *supermarket){
 			this->endTime = this->startTime;
 			supermarket->addCustomerPaid(1);
 			supermarket->returnCart();
+			//Checking if the queue for getting a Cart is filled. You can use supermarket->getAvailableCarts() == 0 too
 			if(supermarket->getCustWaitForCart().empty() != true){
-				eventReturn.push_front(generateNextEvent(2,this->endTime,this->customer));
+				//generate Event for the Customer in the front of the Cart Queue, if the queue is filled
+				eventReturn.push_front(generateNextEvent(2,this->endTime,supermarket->getCustWaitForCart().front()));
 				supermarket->getCustWaitForCart().pop();
 			}
 			break;
