@@ -41,6 +41,7 @@ public:
 	void setAmount(int);
 	void runQueue();
 	int generateItemAmount();
+	void generateReport();
 
 private:
 	simpleTime realTime; //the simulation time which is set by events

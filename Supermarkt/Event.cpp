@@ -110,8 +110,8 @@ void Event::execute(list<Event> &eventList, Supermarket *supermarket){
 			//checking, if the Queue of Customer of the selected Cashbox is filled to generate the next Event for the Customer
 			if(supermarket->getSpecificCashbox(selectedCashboxIndex)->getCustQueue().empty() != true){
 				//generate Event for Customer that is behind this->Customer in the Cashbox-Queue. 
+				cout<<" case 5 if"<<endl;
 				eventReturn.push_front(generateNextEvent(5,this->endTime,temp->getCustQueue().front()));
-				break;
 			}
 			eventReturn.push_front(generateNextEvent(6,this->endTime));
 			break;

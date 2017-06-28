@@ -43,7 +43,6 @@ Simulation::Simulation(bool i):supermarket(Simulation::inputParams[0],simpleTime
 	Simulation::dauer = inputParams[2];
 	//Simulation::rushhour = inputParams[3];
 	Simulation::itemWert = inputParams[4];
-	cout<< "item mittelwert "<< itemWert <<endl;
 	Simulation::kunden = inputParams[5];
 	Simulation::itemZeit = inputParams[6];
 	Simulation::zeitProProdukt = inputParams[7];
@@ -56,6 +55,7 @@ Simulation::Simulation(bool i):supermarket(Simulation::inputParams[0],simpleTime
 
 	this->preperation();
 	this->runQueue();
+	generateReport();
 }
 
 Simulation::~Simulation()
@@ -161,8 +161,70 @@ void Simulation::runQueue(){
 	}
 	cout<<"test how to acces static fields " <<kunden<<endl;
 	cout<<"finish"<<endl;
-	cout<< "last event at "<< realTime.toString()<<endl;
-	cout<<"customer arrived "<<supermarket.getCustomerArrived()<<endl;
-	cout<<"customer payed "<<supermarket.getCustomerPaid()<<endl;
-	cout<<"customer left "<<supermarket.getCustomerArrived() - supermarket.getCustomerPaid()<<endl;
+
 }
+
+
+
+
+//=========================For Report========================
+//the file which is used is Results.txt and lays in the same 
+//folder as the other documents
+
+/*
+	customer
+	XXXXwhich information do we want?
+	XXXXamount of all customers
+	XXXXamount of all customer who left
+	XXXXamount of all customer who stayed and paid
+	how long did a customer stayed -> average time; ->min time -> max Time
+
+
+	cashboxes
+	how many did each cashbox served as number and %
+	how long was average lane length
+	time of an empty queue
+
+	supermarket
+	XXXXwhen did it actually close
+
+*/
+void Simulation::generateReport(){
+
+	string reportPath ="Results.txt";
+	//set the report open for output operations and append results if 
+	//file allready exists
+	ofstream report (reportPath, ios::out | ios::app);
+ 	if (!report.is_open())
+  	{
+   		cerr<< "Error could not open the "<<reportPath<<" file "<<endl;
+    	report.close();
+  	}
+  	else{
+  	report<<"================Start of Simulation=========\n";
+  	report<<"++++++++++++++++Eingabewerte++++++++++++++++\n";
+  	report<<"Anzahl der Kassen "<<kassen<<"\n";
+	report<< "Anzahl der Einkaufswagen "<<wagen<<"\n";
+	report<<"Oeffnungsdauer "<<dauer<<"\n";
+	report<<"Item itemMittelwert "<<itemWert<<"\n";
+	report<<"Auwahlzeit fuer ein Produkt "<<itemZeit<<"\n";
+	report<<"Kunden Mittelwert "<<kunden<<"\n";
+	report<<"Kassenbedienzeit pro Produkt "<<zeitProProdukt<<"\n";
+	report<<"Fixe bezahl Zeit "<<bezahlen<<"\n";
+	report<<"Seed fuer die Kunden-Erstellung "<<seed1<<"\n";
+	report<<"Seed fuer die Itemgenerierung "<<seed2<<"\n";
+
+  	report<<"++++++++++++++++Ausgabewerte++++++++++++++++\n";
+  	report<< "supermarket close time  "<< realTime.toString()<<"\n";
+	report<<"customer arrived "<<supermarket.getCustomerArrived()<<"\n";
+	report<<"customer payed "<<supermarket.getCustomerPaid()<<"\n";
+	report<<"customer left "<<supermarket.getCustomerArrived() - supermarket.getCustomerPaid()<<"\n";
+  	
+
+  		//here comes real data
+  	report<<"====================+END OF SIMULATION==================\n";
+  	report<<"\n";
+  	report<<"\n";
+  	report.close();	
+  	}
+ } 
